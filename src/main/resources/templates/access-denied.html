@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Access denied</title>
+</head>
+<body>
+
+<h2>403 — Access denied</h2>
+<p>У вас нет прав для доступа к этой странице.</p>
+
+<p>
+    <a th:href="@{/user}">На страницу /user</a> |
+    <a th:href="@{/admin}">На страницу /admin</a>
+</p>
+
+<form th:action="@{/logout}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>
