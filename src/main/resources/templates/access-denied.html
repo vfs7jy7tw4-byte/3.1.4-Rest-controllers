@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Access denied</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-<h2>403 — Access denied</h2>
-<p>У вас нет прав для доступа к этой странице.</p>
+<div class="container py-5" style="max-width: 700px;">
+    <div class="alert alert-danger">
+        <h3 class="mb-2">403 — Access denied</h3>
+        <p class="mb-0">У вас нет прав для доступа к этой странице.</p>
+    </div>
 
-<p>
-    <a th:href="@{/user}">На страницу /user</a> |
-    <a th:href="@{/admin}">На страницу /admin</a>
-</p>
+    <div class="d-flex gap-2">
+        <a class="btn btn-primary" th:href="@{/user}">На страницу /user</a>
+        <a class="btn btn-secondary" th:href="@{/admin}">На страницу /admin</a>
 
-<form th:action="@{/logout}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <button type="submit">Logout</button>
-</form>
+        <form th:action="@{/logout}" method="post" class="ms-auto">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button class="btn btn-outline-dark" type="submit">Logout</button>
+        </form>
+    </div>
+</div>
 
 </body>
 </html>

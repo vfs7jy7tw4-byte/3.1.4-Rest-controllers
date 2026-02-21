@@ -27,17 +27,22 @@ public class AdminController {
     }
 
     @GetMapping
-    public String adminPage(Model model) {
+    public String usersTable(Model model) {
         model.addAttribute("users", users.findAll());
-        model.addAttribute("newUser", new User());
-        model.addAttribute("allRoles", roles.findAll());
         return "admin";
     }
 
+    @GetMapping("/new")
+    public String newUser(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("allRoles", roles.findAll());
+        return "new-user";
+    }
 
-    @PostMapping("/create")
-    public String create(@ModelAttribute("newUser") User user,
-                         @RequestParam(value = "roleIds", required = false) Set<Long> roleIds) {
+
+    @PostMapping("/new")
+    public String createUser(@ModelAttribute("user") User user,
+                             @RequestParam(value = "roleIds", required = false) Set<Long> roleIds) {
 
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRoles(loadRolesOrDefaultUserRole(roleIds));
@@ -47,11 +52,20 @@ public class AdminController {
     }
 
 
-    @PostMapping("/update")
-    public String update(@RequestParam("id") Long id,
-                         @RequestParam("email") String email,
-                         @RequestParam(value = "password", required = false) String password,
-                         @RequestParam(value = "roleIds", required = false) Set<Long> roleIds) {
+    @GetMapping("/edit/{id}")
+    public String editUser(@PathVariable Long id, Model model) {
+        User existing = users.findById(id).orElseThrow();
+        model.addAttribute("user", existing);
+        model.addAttribute("allRoles", roles.findAll());
+        return "edit-user";
+    }
+
+
+    @PostMapping("/edit")
+    public String updateUser(@RequestParam("id") Long id,
+                             @RequestParam("email") String email,
+                             @RequestParam(value = "password", required = false) String password,
+                             @RequestParam(value = "roleIds", required = false) Set<Long> roleIds) {
 
         User existing = users.findById(id).orElseThrow();
 
@@ -68,8 +82,14 @@ public class AdminController {
     }
 
 
+    @GetMapping("/delete/{id}")
+    public String deleteConfirm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", users.findById(id).orElseThrow());
+        return "delete-user";
+    }
+
     @PostMapping("/delete")
-    public String delete(@RequestParam("id") Long id) {
+    public String deleteUser(@RequestParam("id") Long id) {
         users.deleteById(id);
         return "redirect:/admin";
     }
